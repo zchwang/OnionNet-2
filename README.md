@@ -15,7 +15,7 @@ First, create a conda environment and install some necessary packages for runnin
     conda install pandas
     conda install scikit-learn=0.22.1
     conda install -c openbabel openbabel
-    conda install -c omnia mdtraj
+    conda install -c conda-forge mdtraj
 
 Or, you can also use pip to install above packages. For example,
     
