@@ -19,7 +19,7 @@ First, create a conda environment and install some necessary packages for runnin
 
 Or, you can also use pip to install above packages. For example,
     
-    pip install tensorflow-gpu==2.3.0
+    pip install tensorflow-gpu==2.3
 
 ## Usage
 ### 1. Prepare the PDB file containing the 3D structure of protein-ligand complexes.
@@ -38,11 +38,11 @@ In the samples/prepare_complexes directory, we provide two scripts to convenient
     # The features and the real pKa are concated in a common file as the input of the training process. We can execute this process with a script   
     python concat_features_pKa.py -inp_features output_features.csv -inp_true all_complexes_pKa.csv -out output_features_pKa.csv
     
-    # The training process will output 3 files, the default is "logfile", "bestmodel.h5" and "train_scaler.scaler"， of which the latter two will be the input of the prediction process. 
+    # The training process will output 3 files, the default are "logfile", "bestmodel.h5" and "train_scaler.scaler"， of which the latter two will be the input of the prediction process. 
     python train.py -h
     python train.py -train_file train_features_pKa.csv -valid_file valid_features_pKa.csv -shape 84 124 1 
 
-### 4. Predict the protein-ligand binding affinity
+### 4. Predict the protein-ligand binding affinity.
 
     python predict_pKa.py -h
     python predict_pKa.py -scaler train_scaler.scaler -model bestmodel.h5 -inp test_features_pKa.csv -out predicted_pKa.csv
