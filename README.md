@@ -25,7 +25,7 @@ Or, you can also use pip to install above packages. For example,
 ### 1. Prepare the PDB file containing the 3D structure of protein-ligand complexes.
 In the samples/prepare_complexes directory, we provide two scripts to conveniently prepare the PDB file containing 3D structure of the protein-ligand complex.
     
-    # Specify the relative path and absolute path of the working directory correctly. For example, 
+    # Specify the relative path or absolute path of the working directory correctly. For example, 
     bash prepare_PDB_file.sh ..
 
 ### 2. Generate the residue-atom contact features.
