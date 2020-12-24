@@ -1,6 +1,9 @@
 # RAbinding
 RAbinding is constructed based on convolutional neural network (CNN) to predict the protein-ligand binding affinity. After careful testing, RAbinding  shows powerful scoring power while low computational cost. 
 
+<img src="tutorials/RAbinding.png" alt="CNN aided protein-ligand binding affinity prediction and docking rescoring">
+
+
 ## Contact
 Prof. Weifeng Li, Shandong University, lwf@sdu.edu.cn</p>
 Zechen Wang, Shandong University, zechenwang@mail.sdu.edu.cn</p>
