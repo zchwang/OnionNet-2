@@ -1,7 +1,7 @@
 # RAbinding
 RAbinding is constructed based on convolutional neural network (CNN) to predict the protein-ligand binding affinity. One of the greatest advantages of RAbinding is that it can achieve higher accuracy at a lower computational cost. When taking CASF-2016 and CASF-2013 as benchmark, RAbinding shows strong scoring power.
 
-
+<img src="tutorials/RAbinding.png">
 
 
 ## Contact
