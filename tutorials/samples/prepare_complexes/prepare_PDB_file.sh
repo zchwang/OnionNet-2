@@ -18,7 +18,7 @@ do
 			echo "${i}_ligand.pdb generated ..."
 		fi
 		
-		if [ ! -e ${i}_ligand_renamed.pdb ] || [ ! -e ${i}_protein_atom.pdb ];then
+		if [ ! -e ${i}_ligand_renamed.pdb ] && [ ! -e ${i}_protein_atom.pdb ];then
 			python ../../prepare/change_name.py ${i}
 		fi
 		
