@@ -36,7 +36,7 @@ def PCC(y_true, y_pred):
 if __name__ == "__main__":
 
     d = """
-
+        Predict the protein-ligand binding affinity.
         """
     parser = argparse.ArgumentParser(description=d, formatter_class=RawDescriptionHelpFormatter)
 
