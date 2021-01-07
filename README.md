@@ -48,4 +48,4 @@ In the samples/prepare_complexes directory, we provide two scripts to convenient
 ### 4. Predict the protein-ligand binding affinity.
 
     python predict_pKa.py -h
-    python predict_pKa.py -scaler train_scaler.scaler -model bestmodel.h5 -inp test_features_pKa.csv -out predicted_pKa.csv
+    python predict_pKa.py -scaler train_scaler.scaler -model bestmodel.h5 -inp input_features.csv -out predicted_pKa.csv
