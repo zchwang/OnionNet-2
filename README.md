@@ -1,5 +1,5 @@
-# RAbinding
-RAbinding is constructed based on convolutional neural network (CNN) to predict the protein-ligand binding affinity. One of the greatest advantages of RAbinding is that it can achieve higher accuracy at a lower computational cost. When taking CASF-2016 and CASF-2013 as benchmark, RAbinding shows strong scoring power.
+# OnionNet-2
+OnionNet-2 is constructed based on convolutional neural network (CNN) to predict the protein-ligand binding affinity. One of the greatest advantages of OnionNet-2 is that it can achieve higher accuracy at a lower computational cost. When taking CASF-2016 and CASF-2013 as benchmark, OnionNet-2 shows strong scoring power.
 
 <img src="tutorials/RAbinding.png">
 
@@ -9,7 +9,7 @@ Prof. Weifeng Li, Shandong University, lwf@sdu.edu.cn</p>
 Zechen Wang, Shandong University, zechenwang@mail.sdu.edu.cn</p>
 
 ## Installation
-First, create a conda environment and install some necessary packages for running RAbinding.
+First, create a conda environment and install some necessary packages for running OnionNet-2.
   
     conda create -n RAbinding python=3.8
     conda activate RAbinding
