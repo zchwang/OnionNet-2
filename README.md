@@ -11,8 +11,8 @@ Zechen Wang, Shandong University, zechenwang@mail.sdu.edu.cn</p>
 ## Installation
 First, create a conda environment and install some necessary packages for running OnionNet-2.
   
-    conda create -n RAbinding python=3.8
-    conda activate RAbinding
+    conda create -n OnionNet-2 python=3.8
+    conda activate OnionNet-2
   
     conda install numpy
     conda install pandas
