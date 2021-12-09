@@ -10,7 +10,7 @@ Zechen Wang, Shandong University, zechenwang@mail.sdu.edu.cn</p>
 
 
 ## Citation
-<a href='https://arxiv.org/abs/2103.11664'>Wang Z, Zheng L, Liu Y, et al. OnionNet-2: A Convolutional Neural Network Model for Predicting Protein-Ligand Binding Affinity based on Residue-Atom Contacting Shells[J]. arXiv preprint arXiv:2103.11664, 2021. </a>
+<a href='https://www.frontiersin.org/articles/10.3389/fchem.2021.753002/full'>Wang Z, Zheng L, Liu Y, et al. OnionNet-2: A Convolutional Neural Network Model for Predicting Protein-Ligand Binding Affinity based on Residue-Atom Contacting Shells. Front Chem 2021, 9, 753002. </a>
 
 
 ## Installation
