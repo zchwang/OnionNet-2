@@ -8,6 +8,11 @@ OnionNet-2 is constructed based on convolutional neural network (CNN) to predict
 Prof. Weifeng Li, Shandong University, lwf@sdu.edu.cn</p>
 Zechen Wang, Shandong University, zechenwang@mail.sdu.edu.cn</p>
 
+
+## Citation
+<a href='https://arxiv.org/abs/2103.11664'>Wang Z, Zheng L, Liu Y, et al. OnionNet-2: A Convolutional Neural Network Model for Predicting Protein-Ligand Binding Affinity based on Residue-Atom Contacting Shells[J]. arXiv preprint arXiv:2103.11664, 2021. </a>
+
+
 ## Installation
 First, create a conda environment and install some necessary packages for running OnionNet-2.
   
