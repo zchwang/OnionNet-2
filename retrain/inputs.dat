@@ -1,0 +1,6 @@
+# id	rec_fpath							lig_fpath
+1c5z	../samples/1c5z/1c5z_protein.pdb	../samples/1c5z/1c5z_ligand.pdb
+1bzc	../samples/1bzc/1bzc_protein.pdb	../samples/1bzc/1bzc_ligand.pdb
+1bcu	../samples/1bcu/1bcu_protein.pdb	../samples/1bcu/1bcu_ligand.pdb
+1e66	../samples/1e66/1e66_protein.pdb	../samples/1e66/1e66_ligand.pdb
+1a30	../samples/1a30/1a30_protein.pdb	../samples/1a30/1a30_ligand.pdb

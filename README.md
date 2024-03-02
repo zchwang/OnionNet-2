@@ -1,11 +1,10 @@
 # OnionNet-2
 OnionNet-2 is constructed based on convolutional neural network (CNN) to predict the protein-ligand binding affinity. One of the greatest advantages of OnionNet-2 is that it can achieve higher accuracy at a lower computational cost. When taking CASF-2016 and CASF-2013 as benchmark, OnionNet-2 shows strong scoring power.
 
-<img src="tutorials/RAbinding.png">
+<img src="models/RAbinding.png">
 
 
 ## Contact
-Prof. Weifeng Li, Shandong University, lwf@sdu.edu.cn</p>
 Zechen Wang, Shandong University, zechenwang@mail.sdu.edu.cn</p>
 
 
@@ -15,47 +14,49 @@ Zechen Wang, Shandong University, zechenwang@mail.sdu.edu.cn</p>
 
 ## Installation
 First, create a conda environment and install some necessary packages for running OnionNet-2.
-  
-    conda create -n OnionNet-2 python=3.8
-    conda activate OnionNet-2
-  
-    conda install numpy
-    conda install pandas
-    conda install scikit-learn=0.22.1
-    conda install -c openbabel openbabel
-    conda install -c conda-forge mdtraj
 
-Or, you can also use pip to install above packages. For example,
-    
-    pip install tensorflow-gpu==2.3
+    python >= 3.8
+    tensorflow==2.3 or tensorflow-gpu==2.3
+    pandas==1.3.4
+    scikit-learn==0.22.1
+    joblib==1.0.1
+    numpy==1.18.5
+    scipy==1.4.1
 
 ## Usage
-### 1. Prepare the PDB file containing the 3D structure of protein-ligand complexes.
-In the samples/prepare_complexes directory, we provide two scripts to conveniently prepare the PDB file containing 3D structure of the protein-ligand complex.
+### 1. Predicting the affinity of a protein-ligand complex using OnionNet-2.
+First, you should download the [model](https://zenodo.org/records/10728089) file and save it to the "models" directory. Then, you should prepare the protein file (.pdb format) and the ligand file (.pdb format) to be predicted. Usually the structure files of ligands are in sdf or mol2 format, and you can generate pdb files through openbabel. The openbabel installation command is as follows:
+
+    conda install -c conda-forge openbabel
+   
+The usage of openbabel is as follows:
+   
+    obabel ligand.sdf -O ligand.pdb
     
-    # Specify the relative path or absolute path of the working directory correctly. For example, 
-    bash prepare_PDB_file.sh ..
-
-### 2. Generate the residue-atom contact features.
-
-    python generate_features.py -h
-    python generate_features.py -shells N -inp inputs_complexes.dat -out output_featurs.csv
-
-The input file (inputs_complexes.dat) contains the path of the protein-ligand complexes pdb files, for example
+We provide the "predict.py" script in the "scoring" directory, you can score protein-ligand complexes using the following command:
     
-    1a30/1a30_complex.pdb
-    1bcu/1bcu_complex.pdb
+    python predict.py \
+	-rec_fpath $rec_fpath \
+	-lig_fpath $lig_fpath \
+	-shape 84,124,1 \
+	-scaler $scaler_fpath \
+	-model $model_fpath \
+	-shells 62 \
+	-out_fpath $out_fpath
 
-### 3. Train the convolutional neural network.
-    
-    # The features and the real pKa are concated in a common file as the input of the training process. We can execute this process with a script.   
-    python concat_features_pKa.py -inp_features output_features.csv -inp_true all_complexes_pKa.csv -out output_features_pKa.csv
-    
-    # The training process will output 3 files, the default are "logfile", "bestmodel.h5" and "train_scaler.scaler"， of which the latter two will be the input of the prediction process. 
-    python train.py -h
-    python train.py -train_file train_features_pKa.csv -valid_file valid_features_pKa.csv -shape 84 124 1 
+rec_fpath and lig_fpath are the paths to the protein and ligand files, while model_fpath and scaler_fpath are the paths to the model and scaler files, respectively. The final predicted affinity is stored in the out_fpath file. We can also provide a shell script "run_predict.sh" in the "scoring" directory. You can run "bash run_predict.sh" to score the complex.
 
-### 4. Predict the protein-ligand binding affinity.
+### 2. Retrain OnionNet-2
+In the "retrain" directiry, we provide the necessary scripts for training OnionNet-2. First, you need to prepare the data sets (training set and validation set) through the "generate_features.py" file:
 
-    python predict_pKa.py -h
-    python predict_pKa.py -scaler train_scaler.scaler -model bestmodel.h5 -inp input_features.csv -out predicted_pKa.csv
+    python generate_features.py \
+        -inp inputs.dat \
+        -out samples_features.pkl \
+        -shells 62
+
+Within the "inputs.dat" file, each line provides the name and path of a protein-ligand complex. The format is as follows:
+
+    1c5z    ../samples/1c5z/1c5z_protein.pdb    ../samples/1c5z/1c5z_ligand.pdb
+    1bzc    ../samples/1bzc/1bzc_protein.pdb    ../samples/1bzc/1bzc_ligand.pdb
+
+"samples_features.pkl" is the output feature file. You can also run "bash run_generate-features.sh" to test this process. After generating the training set and validation set, you can train your model using the "train.py" script. For usage and related parameters of "train.py", refer to the "run_training.sh" script.

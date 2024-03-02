@@ -1,11 +1,13 @@
+import os
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"  
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import tensorflow as tf
 import pandas as pd
 import numpy as np
 from argparse import RawDescriptionHelpFormatter
 import argparse
+import joblib
 from sklearn import preprocessing
-from sklearn.externals import joblib
-import os
 
 def PCC_RMSE(y_true, y_pred):
     alpha = args.alpha
@@ -82,17 +84,21 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description=d, formatter_class=RawDescriptionHelpFormatter)   
 
-    parser.add_argument("-train_file", type=str, default="train_features_pKa.csv",
-                        help="Input. This input file should include the features and pKa \n"
-                             "of complexes in the training set.")
-    parser.add_argument("-valid_file", type=str, default="valid_features_pKa.csv",
-                        help="Input. This input file shuould include the features and pKa \n"
-                             "of complexes in the validating set.")
-    parser.add_argument("-shape", type=int, default=[84, 124, 1], nargs="+",
+    parser.add_argument("-train_fpath", type=str, default="train_features.pkl",
+                        help="Input. This input file includes the features of complexes\n"
+                             "in the training set.")
+    parser.add_argument("-valid_fpath", type=str, default="valid_features.pkl",
+                        help="Input. This input file includes the features of complexes \n"
+                             "in the validating set.")
+    parser.add_argument("-label_fpath", type=str, default="PDBbindv2019_pKd-label.csv",
+                        help="Input. This file includes all labels of complexes.")
+    #parser.add_argument("-shape", type=int, default=[84, 124, 1], nargs="+",
+    #                    help="Input. Reshape the features.")
+    parser.add_argument("-shape", type=str, default="84,124,1",
                         help="Input. Reshape the features.")
     parser.add_argument("-lr", type=float, default=0.001,
                         help="Input. The learning rate.")
-    parser.add_argument("-batchsz", type=int, default=64,
+    parser.add_argument("-batch_size", type=int, default=64,
                         help="Input. The number of samples processed per batch.")
     parser.add_argument("-rate", type=float, default=0.0,
                         help="Input. The dropout rate.")
@@ -107,43 +113,52 @@ if __name__ == "__main__":
                         help="Input. The number of times all samples in the training set pass the CNN model.")
     parser.add_argument("-patience", type=int, default=30,
                         help="Input. Number of epochs with no improvement after which training will be stopped.")
-    parser.add_argument("-out", type=str, default="bestmodel.h5",
+    parser.add_argument("-out_model", type=str, default="bestmodel.h5",
                         help="output. The file path of saved best model. ")
     
     args = parser.parse_args()
-
-    model = create_model(args.shape, args.lr)
+    shape = [int(x) for x in args.shape.split(",")]
+    model = create_model(shape, args.lr)
+    label_df = pd.read_csv(args.label_fpath, index_col=0)
 
     # load data
-    train = pd.read_csv(args.train_file, index_col=0)
+    """
+    init_train_df = pd.read_pickle(args.train_fpath)
+    train_df = pd.concat([init_train_df, label_df], axis=1).dropna()
     print("Training set loaded ...")
-    valid = pd.read_csv(args.valid_file, index_col=0)
+    init_valid_df = pd.read_pickle(args.valid_fpath)
+    valid_df = pd.concat([init_valid_df, label_df], axis=1).dropna()
     print("Validating set loaded ...")
+    
+    """
+    print(args.train_fpath)
+    train_df = pd.read_pickle(args.train_fpath)
+    valid_df = pd.read_pickle(args.valid_fpath)
 
-    X_train = train.values[:, :args.n_features]
-    X_valid = valid.values[:, :args.n_features]
+    # labels
+    y_train = train_df.values[:, -1]
+    y_valid = valid_df.values[:, -1]
+
+    X_train = train_df.values[:, :args.n_features]
+    X_valid = valid_df.values[:, :args.n_features]
 
     # Standardize the features
     scaler = preprocessing.StandardScaler()
 
-    X_train_std = scaler.fit_transform(X_train).reshape([-1] + args.shape)
-    X_valid_std = scaler.transform(X_valid).reshape([-1] + args.shape)
+    X_train_std = scaler.fit_transform(X_train).reshape([-1] + shape)
+    X_valid_std = scaler.transform(X_valid).reshape([-1] + shape)
 
     joblib.dump(scaler, 'train_scaler.scaler')
-
-    # labels
-    y_train = train.pKa.values
-    y_valid = valid.pKa.values
 
     # Callback
     stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0.001, patience=args.patience,
                                             verbose=1, mode='auto', )
     logger = tf.keras.callbacks.CSVLogger("logfile", separator=',', append=False)
-    bestmodel = tf.keras.callbacks.ModelCheckpoint(filepath=args.out, verbose=1, save_best_only=True)
+    bestmodel = tf.keras.callbacks.ModelCheckpoint(filepath=args.out_model, verbose=1, save_best_only=True)
         
     history = model.fit(X_train_std, y_train,
                         validation_data = (X_valid_std, y_valid),   
                         epochs = args.epochs,
-                        batch_size = args.batchsz,
+                        batch_size = args.batch_size,
                         verbose=1,
                         callbacks=[stop, logger, bestmodel])
